@@ -10,6 +10,7 @@ from langchain.document_loaders import TextLoader
 from langchain.memory import ConversationBufferMemory
 from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
+from langchain_huggingface import HuggingFaceEmbeddings
 
 
 from pathlib import Path
@@ -58,7 +59,10 @@ class helpers():
 
             text_splitter = RecursiveCharacterTextSplitter(chunk_size=5000, chunk_overlap=500)
             texts = text_splitter.split_text(context)
-            embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-001",google_api_key=GOOGLE_API_KEY)            
+            # embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-001",google_api_key=GOOGLE_API_KEY)      
+            embeddings = HuggingFaceEmbeddings(
+                model_name="sentence-transformers/all-MiniLM-L6-v2"
+            )      
             return [embeddings, texts]
         except Exception as e:
             print(f"Error in createEmbeddings: {e}")
